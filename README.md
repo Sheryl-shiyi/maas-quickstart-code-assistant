@@ -208,6 +208,9 @@ The following prerequisites are required in your environment to prevent any conf
   [as documented](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4/html/installing_and_uninstalling_openshift_ai_self-managed/installing-and-deploying-openshift-ai_install#installing-the-openshift-ai-operator_operator-install).
   - The `DSCInitialization` has been modified to enable OpenShift AI metrics,
     [as documented](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4/html/managing_openshift_ai/managing-observability_managing-rhoai#enabling-the-observability-stack_managing-rhoai).
+    - Note that the documentation link includes more than the `metrics` section. If you enable the `traces`, other
+      prerequisites would be required. The important section to modify is just `metrics`, and the values can be tuned
+      according to your available resources and expected resource consumption.
   - A `DataScienceCluster` has been created that enables at least the Dashboard, KServe, and Llama Stack Operator
     components,
     [as documented](https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.4/html/installing_and_uninstalling_openshift_ai_self-managed/installing-and-deploying-openshift-ai_install#installing-and-managing-openshift-ai-components_component-install),
