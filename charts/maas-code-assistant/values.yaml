@@ -19,12 +19,18 @@ subscriptions:
       nemotron-3-nano-30b-a3b:
         - limit: 100000
           window: 1m
+      qwen3-8b-fp8:
+        - limit: 100000
+          window: 1m
   user:
     displayName: MaaS Users
     groups:
       - name: user
     tokenRateLimits:
       nemotron-3-nano-30b-a3b:
+        - limit: 50000
+          window: 1m
+      qwen3-8b-fp8:
         - limit: 50000
           window: 1m
 
@@ -55,6 +61,37 @@ models:
       - --enable-force-include-usage
       - --reasoning-parser-plugin=/mnt/models/nano_v3_reasoning_parser.py
       - --reasoning-parser=nano_v3
+    nodeSelector:
+      nvidia.com/gpu.product: NVIDIA-L40S
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Exists
+
+  - name: qwen3-8b-fp8
+    displayName: Qwen3 8B FP8 Dynamic
+    uri: oci://registry.redhat.io/rhelai1/modelcar-qwen3-8b-fp8-dynamic:1.5
+    hardwareProfile:
+      enabled: true
+      name: gpu
+      namespace: redhat-ods-applications
+    resources:
+      limits:
+        cpu: "4"
+        memory: 20Gi
+        nvidia.com/gpu: "1"
+      requests:
+        cpu: "2"
+        memory: 12Gi
+        nvidia.com/gpu: "1"
+    extraArgs:
+      - --max-model-len=40960
+      - --enable-auto-tool-choice
+      - --tool-call-parser=hermes
+      - --trust-remote-code
+      - --enable-force-include-usage
+    nodeSelector:
+      nvidia.com/gpu.product: NVIDIA-A10G
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
