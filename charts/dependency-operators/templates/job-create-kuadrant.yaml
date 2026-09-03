@@ -1,12 +1,5 @@
 {{- if .Values.rhcl.create }}
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Values.rhcl.namespace }}
-  labels:
-    {{- include "dependency-operators.labels" . | nindent 4 }}
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: create-kuadrant
