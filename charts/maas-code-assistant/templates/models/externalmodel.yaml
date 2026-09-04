@@ -1,0 +1,41 @@
+{{- range .Values.externalModels }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .name }}-api-key
+  namespace: {{ $.Values.modelsNamespace }}
+  labels:
+    {{- include "maas-code-assistant.labels" $ | nindent 4 }}
+    inference.llm-d.ai/ipp-managed: "true"
+type: Opaque
+data:
+  api-key: {{ .apiKey | default "CHANGEME" | b64enc }}
+---
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: ExternalModel
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.modelsNamespace }}
+  labels:
+    {{- include "maas-code-assistant.labels" $ | nindent 4 }}
+    opendatahub.io/dashboard: "true"
+spec:
+  provider: {{ .provider }}
+  endpoint: {{ .endpoint }}
+  targetModel: {{ .targetModel }}
+  credentialRef:
+    name: {{ .name }}-api-key
+---
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSModelRef
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.modelsNamespace }}
+  labels:
+    {{- include "maas-code-assistant.labels" $ | nindent 4 }}
+spec:
+  modelRef:
+    kind: ExternalModel
+    name: {{ .name }}
+{{- end }}
